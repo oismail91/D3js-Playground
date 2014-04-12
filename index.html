@@ -8,22 +8,83 @@
 </head>
 <body>
 <script type="text/javascript">
-  var dataset = [ 25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
+  // Bar Chart with SVG
+  var datasetFour = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+                11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+  var w = 500;
+  var h = 100;
+  var svg = d3.select("body").append("div").attr("width", w).attr("height", h);
+  
+  svg.selectAll("rect")
+    .data(datasetFour)
+    .enter()
+    .append("rect")
+    .attr("x", function(d, i) {
+      return i * 21;
+    })
+    .attr("y", 0)
+    .attr("width", 20)
+    .attr("height", 100);
+
+
+  d3.select("body").selectAll("div")
+      .data(datasetFour)
+      .enter()
+      .append("div")
+      .attr("class", "bar")
+      .style("height", function(d) {
+        var barHeight = d * 5;
+        return barHeight + "px";
+      });
+
+
+
+  d3.select("body").append("br")
+  // Making a circle chart with SVG
+  var w = 500;
+  var h = 50; 
+  var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+  var datasetThree = [5, 10, 15, 20, 25];
+  var circles = svg.selectAll("circle").data(datasetThree).enter().append("circle");
+
+  circles.attr("cx", function(d, i) { 
+    return (i * 50) + 25; 
+  })
+  .attr("cy", h/2)
+  .attr("r", function(d) { 
+    return d;
+  })
+  .attr("fill", "yellow")
+  .attr("stroke", "orange")
+  .attr("stroke-width", function(d) {
+    return d/2;
+  });
+
+
+
+
+  d3.select("body").append("br")
+  // Basic Bar Chart using data
+  var datasetTwo = [ 25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
                 14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
                 24, 18, 25, 9, 3 ];
   
-  d3.select("body").selectAll("div").data(dataset).enter().append("div").attr("class", "bar").style("height", function(d) { 
+  d3.select("body").selectAll("div").data(datasetTwo).enter().append("div").attr("class", "bar").style("height", function(d) { 
     var barHeight = d * 5;
     return barHeight + "px"; } )
 
 
+
+
+  // Basic display of texts depending on data
+  var datasetOne = [5, 10, 15, 20, 25]
   var canCount = function (d) {
     return "I can count up to " + d;
   };
   
-  d3.select("body").selectAll("p").data(dataset).enter().append("p").text(canCount);
+  d3.select("body").selectAll("p").data(datasetOne).enter().append("p").text(canCount);
   // Another way of doing it without creating a function
-  // d3.select("body").selectAll("p").data(dataset).enter().append("p").text(function(d) { return "I can count up to " + d; } );
+  // d3.select("body").selectAll("p").data(datasetOne).enter().append("p").text(function(d) { return "I can count up to " + d; } );
 
   // This is used to test a loading a csv
   // d3.csv("food.csv", function(data) {
