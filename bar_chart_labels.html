@@ -9,13 +9,12 @@
     </style>
   </head>
   <body>
-    <p>Click on this text to update the chart with the new data values (once).</p>
+    <p>Click on this text to update the chart with the new data values (as many times as u want. Kinda cool!).</p>
     <script type="text/javascript">
 
       //Width and height
       var w = 500;
       var h = 250;
-      var barPadding = 1;
 
       var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
               11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
@@ -43,7 +42,7 @@
             return xScale(i);
          })
          .attr("y", function(d) {
-            return h - (d * 4);
+            return h - yScale(d);
          })
          .attr("width", xScale.rangeBand())
          .attr("height", function(d) {
@@ -76,12 +75,32 @@
 
     d3.select("p").on("click", function() {
       //New values for dataset
-      dataset = [ 11, 12, 15, 20, 18, 17, 16, 18, 23, 25,
-                    5, 10, 13, 19, 21, 25, 22, 18, 15, 13 ];
+      // Static data set
+      // dataset = [ 11, 12, 15, 20, 18, 17, 16, 18, 23, 25,
+      //               5, 10, 13, 19, 21, 25, 22, 18, 15, 13 ];
+
+      // Randomized Data Set
+      var numValues = dataset.length;
+      var maxValue = 100;
+      dataset = [];
+      for (var i = 0; i < numValues; i++) {
+        var newNumber = Math.floor(Math.random() * maxValue);
+        dataset.push(newNumber);
+      }
+
+      //Update scale domain
+      //Recalibrate the scale domain, given the new max value in dataset
+      yScale.domain([0, d3.max(dataset)]);
 
       // Update all rects
       svg.selectAll("rect")
          .data(dataset)
+         .transition()
+         .delay(function(d, i) {
+            return i / dataset.length * 1000;
+         }) 
+         .duration(1000)
+         .ease("linear")
          .attr("y", function(d) {
             return h - yScale(d);
          })
@@ -95,6 +114,12 @@
       // Update labels
       svg.selectAll("text")
          .data(dataset)
+         .transition()
+         .delay(function(d, i) {
+            return i / dataset.length * 1000;
+         }) 
+         .duration(1000)
+         .ease("linear")
          .text(function(d) {
             return d;
          })
