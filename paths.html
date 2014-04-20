@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>D3: Paths using GeoData</title>
+  <script type="text/javascript" src="../d3/d3.js"></script>
+  <style type="text/css">
+
+  </style>
+</head>
+</head>
+<body>
+  <script type="text/javascript">
+  var w = 500;
+  var h = 300;
+
+  //Defining the map projection
+  // A projection is an algorithm of compromise; it is the method by which 3D space is “projected” onto a 2D plane.
+  var projection = d3.geo.albersUsa()
+                     .translate([w/2, h/2])
+                     .scale([500]);
+
+  //This takes translates GeoJSON coordinates into SVG path codes
+  var path = d3.geo.path()
+                   .projection(projection);
+
+
+
+  //Create SVG element
+  var svg = d3.select("body")
+              .append("svg")
+              .attr("widt", w)
+              .attr("height", h);
+
+  d3.json("us-states.json", function(json) { 
+    //Binds data and create one path per GeoJSON feature
+    svg.selectAll("path")
+       .data(json.features)
+       .enter()
+       .append("path")
+       .attr("d", path)
+       .attr("fill", "steelblue");
+  });
+
+
+  </script>
+</body>
+</html>
